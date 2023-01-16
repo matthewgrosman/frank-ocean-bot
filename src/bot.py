@@ -66,7 +66,7 @@ async def trivia(ctx: discord.ext.commands.context.Context) -> None:
 
 
 @bot.command(name="song", aliases=["s"])
-async def song(ctx) -> None:
+async def song(ctx: discord.ext.commands.context.Context) -> None:
     """
     When this command is triggered, it returns a random Frank Ocean song. The song is displayed in the format:
     "{song_title} from {album}: {link_to_song}" if the song is from an album or "{song_title} (Single): {link_to_song}"
@@ -84,8 +84,13 @@ async def song(ctx) -> None:
 
 
 @bot.event
-async def on_ready():
-    print("Bot {0.user} is active".format(bot))
+async def on_ready() -> None:
+    """
+    Prints a message to console when the bot connects to Discord.
+
+    :return:    None.
+    """
+    print("Bot {0.user} is active.".format(bot))
 
 
 if __name__ == '__main__':
