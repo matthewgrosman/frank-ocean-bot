@@ -1,3 +1,4 @@
+# Set of channels that bot can message in.
 ALLOWED_CHANNELS = {846304419335241759,     # spam
                     488945733358321688,     # just-chatting
                     751268873445048350,     # bot-commands
@@ -5,8 +6,10 @@ ALLOWED_CHANNELS = {846304419335241759,     # spam
                     1062287061912129587,    # random (DEV ACCOUNT, REMOVE THIS LATER)
                     }
 
+# If a message contains these words, the bot will respond with the Nights copypasta.
 BOT_TRIGGER_WORDS = {"frank", "ocean", "blonde"}
 
+# A copypasta talking about how Nights contains a beat switch halfway through the album Blonde.
 NIGHTS_COPYPASTA = "Did you know that on the album Blonde (2016) by artist Frank Ocean, at *exactly* halfway through " \
                     "the album’s one hour runtime a beat switch occurs on the track Nights? There are many different " \
                     "interpretations on the meaning behind this. Some theories link it back to the album’s " \
@@ -14,6 +17,7 @@ NIGHTS_COPYPASTA = "Did you know that on the album Blonde (2016) by artist Frank
                     "the past- even the spelling of the album’s title (Blonde vs Blond) varies across streaming " \
                     "platforms and physical vinyl releases. "
 
+# This list contains trivia about Frank Ocean. This is where the "!trivia" command pulls trivia from.
 TRIVIA = [
     "Frank Ocean wrote *Channel Orange* in just **2 weeks**!",
     "Frank Ocean eats his Pop-Tarts without frosting.",
@@ -60,4 +64,5 @@ TRIVIA = [
     "Frank Ocean lives in New York City.",
     "Before recording his own music, Frank Ocean was originally a songwriter. He has written songs for artists such as "
     "Justin Bieber and Beyonce.",
+    NIGHTS_COPYPASTA
 ]
