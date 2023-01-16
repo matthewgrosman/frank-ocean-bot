@@ -83,10 +83,9 @@ async def song(ctx) -> None:
         await ctx.send(f"**{song.title}** {formatted_album}: {song.link}")
 
 
-
 @bot.event
 async def on_ready():
-    print("Logged in as a bot {0.user}".format(bot))
+    print("Bot {0.user} is active".format(bot))
 
 
 if __name__ == '__main__':

@@ -1,6 +1,6 @@
-# Set of channels that bot can message in.
 from collections import namedtuple
 
+# Set of channels that bot can message in.
 ALLOWED_CHANNELS = {
     846304419335241759,     # spam
     488945733358321688,     # just-chatting
