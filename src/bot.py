@@ -48,15 +48,40 @@ async def on_message(message: discord.message.Message) -> None:
     if is_trigger_message(channel, user_message):
         await message.channel.send(constants.NIGHTS_COPYPASTA)
 
-    # Allows bot to still read command even though we are overloading the on_message function.
+    # Allows bot to still react to commands even though we are overloading the on_message function.
     # See: https://stackoverflow.com/a/62380420
     await bot.process_commands(message)
 
 
 @bot.command(name="trivia", aliases=["t"])
-async def trivia(ctx) -> None:
+async def trivia(ctx: discord.ext.commands.context.Context) -> None:
+    """
+    When this command is triggered, it returns a trivia fact about Frank Ocean.
+
+    :param ctx: Context object containing all relevant data about command being triggered.
+    :return:    None.
+    """
     if ctx.channel.id in constants.ALLOWED_CHANNELS:
         await ctx.send(random.choice(constants.TRIVIA))
+
+
+@bot.command(name="song", aliases=["s"])
+async def song(ctx) -> None:
+    """
+    When this command is triggered, it returns a random Frank Ocean song. The song is displayed in the format:
+    "{song_title} from {album}: {link_to_song}" if the song is from an album or "{song_title} (Single): {link_to_song}"
+    if the song is not from an album.
+
+    :param ctx: Context object containing all relevant data about command being triggered.
+    :return:    None.
+    """
+    if ctx.channel.id in constants.ALLOWED_CHANNELS:
+        song = random.choice(constants.SONGS)
+        # If the song is from an album we want to display "from {album_name}" after the song title, and if the
+        # song is a single, we want to display "(Single)" after the song title.
+        formatted_album = f"*({song.album})*" if song.album == "Single" else f"from *{song.album}*"
+        await ctx.send(f"**{song.title}** {formatted_album}: {song.link}")
+
 
 
 @bot.event
