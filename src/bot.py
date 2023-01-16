@@ -1,4 +1,5 @@
 import os
+import random
 import discord
 import constants
 
@@ -9,7 +10,7 @@ load_dotenv()
 token = os.getenv('TOKEN')
 
 intents = discord.Intents.all()
-bot = commands.Bot(command_prefix='/', intents=intents, case_insensitive=True)
+bot = commands.Bot(command_prefix='!', intents=intents, case_insensitive=True)
 
 
 def is_trigger_message(channel: int, message_content: str) -> bool:
@@ -23,12 +24,7 @@ def is_trigger_message(channel: int, message_content: str) -> bool:
     :return:                    A boolean denoting if the message is a trigger message.
     """
     return (channel in constants.ALLOWED_CHANNELS) \
-        and (any(word in message_content for word in constants.BOT_TRIGGER_WORDS))
-
-
-@bot.event
-async def on_ready():
-    print("Logged in as a bot {0.user}".format(bot))
+        and (any(word in message_content.split() for word in constants.BOT_TRIGGER_WORDS))
 
 
 @bot.event
@@ -51,6 +47,21 @@ async def on_message(message: discord.message.Message) -> None:
 
     if is_trigger_message(channel, user_message):
         await message.channel.send(constants.NIGHTS_COPYPASTA)
+
+    # Allows bot to still read command even though we are overloading the on_message function.
+    # See: https://stackoverflow.com/a/62380420
+    await bot.process_commands(message)
+
+
+@bot.command(name="trivia", aliases=["t"])
+async def trivia(ctx) -> None:
+    if ctx.channel.id in constants.ALLOWED_CHANNELS:
+        await ctx.send(random.choice(constants.TRIVIA))
+
+
+@bot.event
+async def on_ready():
+    print("Logged in as a bot {0.user}".format(bot))
 
 
 if __name__ == '__main__':
