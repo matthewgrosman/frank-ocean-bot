@@ -1,6 +1,7 @@
 import os
 import random
 import discord
+import datetime
 
 from dotenv import load_dotenv
 from discord.ext import commands
@@ -8,6 +9,7 @@ from discord.ext import commands
 import constants.songs as frank_songs
 import constants.trivia as frank_trivia
 import constants.lyrics as frank_lyrics
+import constants.coachella as coachella_date
 import constants.discord_constants as discord_constants
 
 load_dotenv()
@@ -17,7 +19,7 @@ intents = discord.Intents.all()
 bot = commands.Bot(command_prefix='!', intents=intents, case_insensitive=True)
 
 
-def is_trigger_message(channel: int, message_content: str) -> bool:
+def _is_trigger_message(channel: int, message_content: str) -> bool:
     """
     Determines if a message sent by a user is a "trigger message". A message is a trigger message if the message
     contains any of the "trigger words" for the bot, which are defined in discord_constants.py and if the message is sent in
@@ -49,7 +51,7 @@ async def on_message(message: discord.message.Message) -> None:
     channel = message.channel.id
     user_message = str(message.content).lower()
 
-    if is_trigger_message(channel, user_message):
+    if _is_trigger_message(channel, user_message):
         await message.channel.send(frank_trivia.NIGHTS_COPYPASTA)
 
     # Allows bot to still react to commands even though we are overloading the on_message function.
@@ -100,6 +102,19 @@ async def trivia(ctx: discord.ext.commands.context.Context) -> None:
     if ctx.channel.id in discord_constants.ALLOWED_CHANNELS:
         lyric = random.choice(frank_lyrics.LYRICS)
         await ctx.send(f"*{lyric.lyric}* (song: **{lyric.song}**)")
+
+
+@bot.command(name="coachella", aliases=["c"])
+async def coachella(ctx: discord.ext.commands.context.Context) -> None:
+    """
+    Returns days until Frank Ocean performs at Coachella.
+
+    :param ctx: Context object containing all relevant data about command being triggered.
+    :return:    None.
+    """
+    if ctx.channel.id in discord_constants.ALLOWED_CHANNELS:
+        days_until_coachella = (coachella_date.COACHELLA_FRANK_DATE - datetime.date.today()).days
+        await ctx.send(f"**{days_until_coachella} days left until Frank Ocean performs at Coachella!!!!**")
 
 
 @bot.event
