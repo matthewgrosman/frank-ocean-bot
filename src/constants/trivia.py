@@ -53,5 +53,5 @@ TRIVIA = [
     "Frank Ocean lives in New York City.",
     "Before recording his own music, Frank Ocean was originally a songwriter. He has written songs for artists such as "
     "Justin Bieber and Beyonce.",
-    NIGHTS_COPYPASTA
+    NIGHTS_COPYPASTA,
 ]

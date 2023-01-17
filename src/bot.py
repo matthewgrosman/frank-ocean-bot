@@ -2,12 +2,13 @@ import os
 import random
 import discord
 
-import constants.songs as frank_songs
-import constants.trivia as frank_trivia
-import constants.discord_constants as discord_constants
-
 from dotenv import load_dotenv
 from discord.ext import commands
+
+import constants.songs as frank_songs
+import constants.trivia as frank_trivia
+import constants.lyrics as frank_lyrics
+import constants.discord_constants as discord_constants
 
 load_dotenv()
 token = os.getenv('TOKEN')
@@ -59,7 +60,7 @@ async def on_message(message: discord.message.Message) -> None:
 @bot.command(name="trivia", aliases=["t"])
 async def trivia(ctx: discord.ext.commands.context.Context) -> None:
     """
-    When this command is triggered, it returns a trivia fact about Frank Ocean.
+    Returns a fact about Frank Ocean.
 
     :param ctx: Context object containing all relevant data about command being triggered.
     :return:    None.
@@ -71,7 +72,9 @@ async def trivia(ctx: discord.ext.commands.context.Context) -> None:
 @bot.command(name="song", aliases=["s"])
 async def song(ctx: discord.ext.commands.context.Context) -> None:
     """
-    When this command is triggered, it returns a random Frank Ocean song. The song is displayed in the format:
+    Returns a Frank Ocean song or feature.
+
+    The song is displayed in the format:
     "{song_title} from {album}: {link_to_song}" if the song is from an album or "{song_title} (Single): {link_to_song}"
     if the song is not from an album.
 
@@ -84,6 +87,19 @@ async def song(ctx: discord.ext.commands.context.Context) -> None:
         # song is a single, we want to display "(Single)" after the song title.
         formatted_album = f"*({song.album})*" if song.album == "Single" else f"from *{song.album}*"
         await ctx.send(f"**{song.title}** {formatted_album}: {song.link}")
+
+
+@bot.command(name="lyric", aliases=["l"])
+async def trivia(ctx: discord.ext.commands.context.Context) -> None:
+    """
+    Returns a lyric from Frank Ocean.
+
+    :param ctx: Context object containing all relevant data about command being triggered.
+    :return:    None.
+    """
+    if ctx.channel.id in discord_constants.ALLOWED_CHANNELS:
+        lyric = random.choice(frank_lyrics.LYRICS)
+        await ctx.send(f"*{lyric.lyric}* (song: **{lyric.song}**)")
 
 
 @bot.event
