@@ -4,12 +4,12 @@ import random
 import discord
 
 from dotenv import load_dotenv
-from discord.ext import commands
+from discord.ext import commands, tasks
 
 import constants.songs as frank_songs
 import constants.trivia as frank_trivia
 import constants.lyrics as frank_lyrics
-import constants.friday_update as friday_update
+import constants.weekly_update as weekly_update_message
 import constants.discord_constants as discord_constants
 
 load_dotenv()
@@ -102,6 +102,17 @@ async def coachella(ctx: discord.ext.commands.context.Context) -> None:
         await ctx.send(f"**{utils.get_days_until_coachella()} days left until Frank Ocean performs at Coachella!!!!**")
 
 
+@tasks.loop(hours=168)  # Repeats once a week.
+async def weekly_update() -> None:
+    """
+    Returns a weekly update that includes trivia and days until Coachella.
+
+    :return:    None.
+    """
+    channel = bot.get_channel(discord_constants.DEV_CHANNEL)
+    await channel.send(weekly_update_message.WEEKLY_UPDATE_MESSAGE)
+
+
 @bot.event
 async def on_ready() -> None:
     """
@@ -110,6 +121,9 @@ async def on_ready() -> None:
     :return:    None.
     """
     print("Bot {0.user} is active.".format(bot))
+
+    # When bot is started, have it give an update. This update is then sent every week.
+    await weekly_update()
 
 
 if __name__ == '__main__':
