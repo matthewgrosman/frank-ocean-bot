@@ -1,7 +1,7 @@
 import os
+import utils
 import random
 import discord
-import datetime
 
 from dotenv import load_dotenv
 from discord.ext import commands
@@ -9,7 +9,7 @@ from discord.ext import commands
 import constants.songs as frank_songs
 import constants.trivia as frank_trivia
 import constants.lyrics as frank_lyrics
-import constants.coachella as coachella_date
+import constants.friday_update as friday_update
 import constants.discord_constants as discord_constants
 
 load_dotenv()
@@ -17,20 +17,6 @@ token = os.getenv('TOKEN')
 
 intents = discord.Intents.all()
 bot = commands.Bot(command_prefix='!', intents=intents, case_insensitive=True)
-
-
-def _is_trigger_message(channel: int, message_content: str) -> bool:
-    """
-    Determines if a message sent by a user is a "trigger message". A message is a trigger message if the message
-    contains any of the "trigger words" for the bot, which are defined in discord_constants.py and if the message is sent in
-    one of the channels our bot is allowed to message in.
-
-    :param channel:             The channel the message was sent in.
-    :param message_content:     The content of the message
-    :return:                    A boolean denoting if the message is a trigger message.
-    """
-    return (channel in discord_constants.ALLOWED_CHANNELS) \
-        and (any(word in message_content.split() for word in discord_constants.BOT_TRIGGER_WORDS))
 
 
 @bot.event
@@ -51,7 +37,7 @@ async def on_message(message: discord.message.Message) -> None:
     channel = message.channel.id
     user_message = str(message.content).lower()
 
-    if _is_trigger_message(channel, user_message):
+    if utils.is_trigger_message(channel, user_message):
         await message.channel.send(frank_trivia.NIGHTS_COPYPASTA)
 
     # Allows bot to still react to commands even though we are overloading the on_message function.
@@ -113,8 +99,7 @@ async def coachella(ctx: discord.ext.commands.context.Context) -> None:
     :return:    None.
     """
     if ctx.channel.id in discord_constants.ALLOWED_CHANNELS:
-        days_until_coachella = (coachella_date.COACHELLA_FRANK_DATE - datetime.date.today()).days
-        await ctx.send(f"**{days_until_coachella} days left until Frank Ocean performs at Coachella!!!!**")
+        await ctx.send(f"**{utils.get_days_until_coachella()} days left until Frank Ocean performs at Coachella!!!!**")
 
 
 @bot.event
