@@ -20,6 +20,19 @@ bot = commands.Bot(command_prefix='!', intents=intents, case_insensitive=True)
 
 
 @bot.event
+async def on_ready() -> None:
+    """
+    Prints a message to console when the bot connects to Discord.
+
+    :return:    None.
+    """
+    print("Bot {0.user} is active.".format(bot))
+
+    # When bot is started, have it give an update. This update is then sent every week.
+    await weekly_update()
+
+
+@bot.event
 async def on_message(message: discord.message.Message) -> None:
     """
     When a message is sent into a channel, this function will grab the message and determine if the bot
@@ -102,6 +115,20 @@ async def coachella(ctx: discord.ext.commands.context.Context) -> None:
         await ctx.send(f"**{utils.get_days_until_coachella()} days left until Frank Ocean performs at Coachella!!!!**")
 
 
+@bot.command(name="picture", aliases=["p"])
+async def picture(ctx: discord.ext.commands.context.Context) -> None:
+    """
+    Returns a picture of Frank Ocean.
+
+    :param ctx: Context object containing all relevant data about command being triggered.
+    :return:    None.
+    """
+    if ctx.channel.id in discord_constants.ALLOWED_CHANNELS:
+        picture_directory = "images/"
+        picture_file = random.choice(os.listdir(picture_directory))
+        await ctx.send(file=discord.File(picture_directory + picture_file))
+
+
 @tasks.loop(hours=168)  # Repeats once a week.
 async def weekly_update() -> None:
     """
@@ -111,19 +138,6 @@ async def weekly_update() -> None:
     """
     channel = bot.get_channel(discord_constants.DEV_CHANNEL)
     await channel.send(weekly_update_message.WEEKLY_UPDATE_MESSAGE)
-
-
-@bot.event
-async def on_ready() -> None:
-    """
-    Prints a message to console when the bot connects to Discord.
-
-    :return:    None.
-    """
-    print("Bot {0.user} is active.".format(bot))
-
-    # When bot is started, have it give an update. This update is then sent every week.
-    await weekly_update()
 
 
 if __name__ == '__main__':
