@@ -1,7 +1,10 @@
 import os
 import random
 import discord
-import constants
+
+import constants.songs as frank_songs
+import constants.trivia as frank_trivia
+import constants.discord_constants as discord_constants
 
 from dotenv import load_dotenv
 from discord.ext import commands
@@ -16,15 +19,15 @@ bot = commands.Bot(command_prefix='!', intents=intents, case_insensitive=True)
 def is_trigger_message(channel: int, message_content: str) -> bool:
     """
     Determines if a message sent by a user is a "trigger message". A message is a trigger message if the message
-    contains any of the "trigger words" for the bot, which are defined in constants.py and if the message is sent in
+    contains any of the "trigger words" for the bot, which are defined in discord_constants.py and if the message is sent in
     one of the channels our bot is allowed to message in.
 
     :param channel:             The channel the message was sent in.
     :param message_content:     The content of the message
     :return:                    A boolean denoting if the message is a trigger message.
     """
-    return (channel in constants.ALLOWED_CHANNELS) \
-        and (any(word in message_content.split() for word in constants.BOT_TRIGGER_WORDS))
+    return (channel in discord_constants.ALLOWED_CHANNELS) \
+        and (any(word in message_content.split() for word in discord_constants.BOT_TRIGGER_WORDS))
 
 
 @bot.event
@@ -32,7 +35,7 @@ async def on_message(message: discord.message.Message) -> None:
     """
     When a message is sent into a channel, this function will grab the message and determine if the bot
     should send a response. We send a response if the message contains any of the "trigger words" for the
-    bot, which are defined in constants.py and if the message is sent in one of the channels our bot is allowed
+    bot, which are defined in discord_constants.py and if the message is sent in one of the channels our bot is allowed
     to message in. If both of these conditions are met, the bot will respond with the Nights copypasta lol.
 
     :param message: A message sent in a Discord text channel.
@@ -46,7 +49,7 @@ async def on_message(message: discord.message.Message) -> None:
     user_message = str(message.content).lower()
 
     if is_trigger_message(channel, user_message):
-        await message.channel.send(constants.NIGHTS_COPYPASTA)
+        await message.channel.send(frank_trivia.NIGHTS_COPYPASTA)
 
     # Allows bot to still react to commands even though we are overloading the on_message function.
     # See: https://stackoverflow.com/a/62380420
@@ -61,8 +64,8 @@ async def trivia(ctx: discord.ext.commands.context.Context) -> None:
     :param ctx: Context object containing all relevant data about command being triggered.
     :return:    None.
     """
-    if ctx.channel.id in constants.ALLOWED_CHANNELS:
-        await ctx.send(random.choice(constants.TRIVIA))
+    if ctx.channel.id in discord_constants.ALLOWED_CHANNELS:
+        await ctx.send(random.choice(frank_trivia.TRIVIA))
 
 
 @bot.command(name="song", aliases=["s"])
@@ -75,8 +78,8 @@ async def song(ctx: discord.ext.commands.context.Context) -> None:
     :param ctx: Context object containing all relevant data about command being triggered.
     :return:    None.
     """
-    if ctx.channel.id in constants.ALLOWED_CHANNELS:
-        song = random.choice(constants.SONGS)
+    if ctx.channel.id in discord_constants.ALLOWED_CHANNELS:
+        song = random.choice(frank_songs.SONGS)
         # If the song is from an album we want to display "from {album_name}" after the song title, and if the
         # song is a single, we want to display "(Single)" after the song title.
         formatted_album = f"*({song.album})*" if song.album == "Single" else f"from *{song.album}*"
