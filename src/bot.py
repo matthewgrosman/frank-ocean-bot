@@ -29,7 +29,7 @@ async def on_ready() -> None:
     print("Bot {0.user} is active.".format(bot))
 
     # When bot is started, have it give an update. This update is then sent every week.
-    await weekly_update()
+    weekly_update.start()
 
 
 @bot.event
@@ -137,7 +137,7 @@ async def weekly_update() -> None:
     :return:    None.
     """
     channel = bot.get_channel(discord_constants.SPAM_CHANNEL)
-    await channel.send(weekly_update_message.WEEKLY_UPDATE_MESSAGE)
+    await channel.send(weekly_update_message.get_weekly_update_message())
 
 
 if __name__ == '__main__':
