@@ -150,7 +150,7 @@ async def weekly_update() -> None:
 
     :return:    None.
     """
-    channel = bot.get_channel(discord_constants.DEV_CHANNEL)
+    channel = bot.get_channel(discord_constants.SPAM_CHANNEL)
     await channel.send(weekly_update_message.get_weekly_update_message())
 
 
