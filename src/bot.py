@@ -129,6 +129,20 @@ async def picture(ctx: discord.ext.commands.context.Context) -> None:
         await ctx.send(file=discord.File(picture_directory + picture_file))
 
 
+@bot.command(name="gif", aliases=["g"])
+async def gif(ctx: discord.ext.commands.context.Context) -> None:
+    """
+    Returns a gif of Frank Ocean.
+
+    :param ctx: Context object containing all relevant data about command being triggered.
+    :return:    None.
+    """
+    if ctx.channel.id in discord_constants.ALLOWED_CHANNELS:
+        gif_directory = "gifs/"
+        gif_file = random.choice(os.listdir(gif_directory))
+        await ctx.send(file=discord.File(gif_directory + gif_file))
+
+
 @tasks.loop(hours=168)  # Repeats once a week.
 async def weekly_update() -> None:
     """
@@ -136,7 +150,7 @@ async def weekly_update() -> None:
 
     :return:    None.
     """
-    channel = bot.get_channel(discord_constants.SPAM_CHANNEL)
+    channel = bot.get_channel(discord_constants.DEV_CHANNEL)
     await channel.send(weekly_update_message.get_weekly_update_message())
 
 
