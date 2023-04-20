@@ -108,7 +108,7 @@ async def coachella(ctx: discord.ext.commands.context.Context) -> None:
     :return:    None.
     """
     if ctx.channel.id in discord_constants.ALLOWED_CHANNELS:
-        await ctx.send(f"**{utils.get_days_until_coachella()} days left until Frank Ocean performs at Coachella!!!!**")
+        await ctx.send(f"Frank Ocean's next performance: **NEVER**")
 
 
 @bot.command(name="picture", aliases=["p"])
