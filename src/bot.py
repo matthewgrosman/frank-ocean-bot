@@ -4,7 +4,7 @@ import random
 import discord
 
 from dotenv import load_dotenv
-from discord.ext import commands, tasks
+from discord.ext import commands
 
 import constants.songs as frank_songs
 import constants.trivia as frank_trivia
