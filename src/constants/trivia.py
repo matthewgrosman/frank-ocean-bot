@@ -6,6 +6,12 @@ NIGHTS_COPYPASTA = "Did you know that on the album Blonde (2016) by artist Frank
                     "the past- even the spelling of the album’s title (Blonde vs Blond) varies across streaming " \
                     "platforms and physical vinyl releases. "
 
+# A copypasta talking about how Frank Ocean dropped out of Coachella weekend 2 in 2023.
+COACHELLA_COPYPASTA = "Did you know that in 2023, Frank Ocean dropped out of Coachella weekend 2 a few days before "\
+                      "the festival?!? This was regarded by fans as a giant **fuck you** to people who spent money " \
+                      "and dedicated time to go to Coachella to see him. Frank proceeded to not give any semblance " \
+                      "of an apology, reminding fans he does not give a shit about them."
+
 # This list contains trivia about Frank Ocean. This is where the "!trivia" command pulls trivia from.
 TRIVIA = [
     "Frank Ocean wrote *Channel Orange* in just **2 weeks**!",

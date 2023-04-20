@@ -47,7 +47,7 @@ async def on_message(message: discord.message.Message) -> None:
     user_message = str(message.content).lower()
 
     if utils.is_trigger_message(channel, user_message):
-        await message.channel.send(frank_trivia.NIGHTS_COPYPASTA)
+        await message.channel.send(frank_trivia.COACHELLA_COPYPASTA)
 
     # Allows bot to still react to commands even though we are overloading the on_message function.
     # See: https://stackoverflow.com/a/62380420
