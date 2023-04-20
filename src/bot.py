@@ -9,7 +9,6 @@ from discord.ext import commands, tasks
 import constants.songs as frank_songs
 import constants.trivia as frank_trivia
 import constants.lyrics as frank_lyrics
-import constants.weekly_update as weekly_update_message
 import constants.discord_constants as discord_constants
 
 load_dotenv()
@@ -27,9 +26,6 @@ async def on_ready() -> None:
     :return:    None.
     """
     print("Bot {0.user} is active.".format(bot))
-
-    # When bot is started, have it give an update. This update is then sent every week.
-    weekly_update.start()
 
 
 @bot.event
@@ -141,17 +137,6 @@ async def gif(ctx: discord.ext.commands.context.Context) -> None:
         gif_directory = "gifs/"
         gif_file = random.choice(os.listdir(gif_directory))
         await ctx.send(file=discord.File(gif_directory + gif_file))
-
-
-@tasks.loop(hours=168)  # Repeats once a week.
-async def weekly_update() -> None:
-    """
-    Returns a weekly update that includes trivia and days until Coachella.
-
-    :return:    None.
-    """
-    channel = bot.get_channel(discord_constants.SPAM_CHANNEL)
-    await channel.send(weekly_update_message.get_weekly_update_message())
 
 
 if __name__ == '__main__':
