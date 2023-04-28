@@ -1,4 +1,6 @@
 import os
+
+import src.constants.copypastas
 import utils
 import random
 import discord
@@ -46,8 +48,9 @@ async def on_message(message: discord.message.Message) -> None:
     channel = message.channel.id
     user_message = str(message.content).lower()
 
-    if utils.is_trigger_message(channel, user_message):
-        await message.channel.send(frank_trivia.COACHELLA_COPYPASTA)
+    if utils.is_message_from_allowed_channel(channel):
+        for word in utils.get_trigger_words_from_message(user_message):
+            await message.channel.send(discord_constants.BOT_TRIGGER_WORDS[word])
 
     # Allows bot to still react to commands even though we are overloading the on_message function.
     # See: https://stackoverflow.com/a/62380420

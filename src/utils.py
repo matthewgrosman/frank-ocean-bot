@@ -1,27 +1,32 @@
-import datetime
-
-import constants.coachella as coachella_date
 import constants.discord_constants as discord_constants
 
 
-def is_trigger_message(channel: int, message_content: str) -> bool:
+def is_message_from_allowed_channel(channel: int) -> bool:
     """
-    Determines if a message sent by a user is a "trigger message". A message is a trigger message if the message
-    contains any of the "trigger words" for the bot, which are defined in discord_constants.py and if the message is sent in
-    one of the channels our bot is allowed to message in.
+    Checks if the channel a message was sent from is an allowed channel. An
+    allowed channel means the bot is allowed to send messages into the channel.
+    We use this function to help determine if the bot can send a message.
 
-    :param channel:             The channel the message was sent in.
-    :param message_content:     The content of the message
-    :return:                    A boolean denoting if the message is a trigger message.
+    :param channel: An int denoting the channel ID that a message was sent in.
+    :return:        A boolean denoting if the channel ID param is in the allowed
+                    channel list.
     """
-    return (channel in discord_constants.ALLOWED_CHANNELS) \
-        and (any(word in message_content.split() for word in discord_constants.BOT_TRIGGER_WORDS))
+    return channel in discord_constants.ALLOWED_CHANNELS
 
 
-def get_days_until_coachella() -> int:
+def get_trigger_words_from_message(message_content: str) -> set:
     """
-    Returns the number of days until Frank Ocean performs at Coachella.
+    Parses a user message and keeps track of any trigger words that were said.
+    Returns a set containing all the trigger words found in the message.
 
-    :return:    An int representing the number of days until Frank Ocean performs at Coachella.
+    :param message_content: A string denoting the content of the message.
+    :return:                A set containing all the trigger words found in
+                            the message.
     """
-    return (coachella_date.COACHELLA_FRANK_DATE - datetime.date.today()).days
+    trigger_words = set()
+
+    for word in message_content.split():
+        if word in discord_constants.BOT_TRIGGER_WORDS:
+            trigger_words.add(word)
+
+    return trigger_words
