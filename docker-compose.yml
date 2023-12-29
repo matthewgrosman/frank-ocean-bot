@@ -1,0 +1,7 @@
+version: "3.9"
+name: "frank-ocean-bot"
+services:
+  frank-ocean-bot:
+    container_name: frank-ocean-bot
+    image: frank-ocean-bot
+    restart: on-failure
